@@ -1,9 +1,8 @@
 async function fetchFamilyData() {
-    // Make sure this URL points to your JSON file on GitHub Pages
-    const response = await fetch('https://omri93h.github.io/ShrikiFamilyTree/assets/data/familyTree.json');
+    const response = await fetch('https://script.google.com/macros/s/AKfycbzXrVgQZ_8Rnhm8EUi8oWthvKMlmnfIFQGRrBtUVedO8zjj8cV4JBDdSSlZJPbY50ZLxg/exec');
     const data = await response.json();
     buildFamilyTree(data);
-  }
+}
   
   function buildFamilyTree(data) {
     const svg = d3.select("svg"),
