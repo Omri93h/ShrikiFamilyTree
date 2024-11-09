@@ -1,0 +1,62 @@
+/* עיצוב גוף הדף */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f7f9fc;
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+  
+  .container {
+    max-width: 960px;
+    text-align: center;
+    margin: 0 auto;
+  }
+  
+  h1 {
+    color: #2c3e50;
+    margin-bottom: 10px;
+  }
+  
+  .form-link {
+    display: inline-block;
+    margin: 15px 0;
+    padding: 10px 20px;
+    background-color: #3498db;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .form-link:hover {
+    background-color: #2980b9;
+  }
+  
+  /* עיצוב עבור עץ המשפחה */
+  svg {
+    border: 1px solid #ddd;
+    background-color: #ffffff;
+    border-radius: 10px;
+  }
+  
+  /* עיצוב Nodes */
+  .node {
+    fill: #2ecc71;
+    stroke: #27ae60;
+    stroke-width: 2px;
+  }
+  
+  text {
+    font-size: 14px;
+    fill: #34495e;
+  }
+  
+  .link {
+    stroke: #bdc3c7;
+    stroke-width: 2px;
+  }
+  
