@@ -1,5 +1,6 @@
 async function fetchFamilyData() {
-    const response = await fetch('assets/data/familyTree.json'); // קישור לקובץ JSON
+    // Make sure this URL points to your JSON file on GitHub Pages
+    const response = await fetch('https://omri93h.github.io/ShrikiFamilyTree/assets/data/familyTree.json');
     const data = await response.json();
     buildFamilyTree(data);
   }
@@ -13,7 +14,7 @@ async function fetchFamilyData() {
     const treeLayout = d3.tree().size([width - 160, height - 200]);
     treeLayout(root);
   
-    // קווי קישור
+    // Draw links between nodes
     svg.selectAll('line')
       .data(root.links())
       .enter()
@@ -24,7 +25,7 @@ async function fetchFamilyData() {
       .attr("y2", d => d.target.y)
       .attr("class", "link");
   
-    // Node והשם
+    // Draw nodes and labels
     const nodes = svg.selectAll('g')
       .data(root.descendants())
       .enter()
@@ -38,6 +39,6 @@ async function fetchFamilyData() {
       .text(d => d.data.name);
   }
   
-  // קריאה לפונקציה
+  // Fetch and build the family tree
   fetchFamilyData();
   
