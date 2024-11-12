@@ -1,61 +1,93 @@
-async function fetchFamilyData() {
-    const response = await fetch('https://script.google.com/macros/s/AKfycbzXrVgQZ_8Rnhm8EUi8oWthvKMlmnfIFQGRrBtUVedO8zjj8cV4JBDdSSlZJPbY50ZLxg/exec');
-    const data = await response.json();
-    buildFamilyTree(data);
-}
-  
+import FamilyTree from "@balkangraph/familytree.js";
+
+// Add basic FamilyTree CSS manually
+const style = document.createElement("style");
+style.textContent = `
+  #familytree .balkangraph-node { /* Basic FamilyTree node styling */
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+  }
+`;
+document.head.appendChild(style);
+
+document.addEventListener("DOMContentLoaded", () => {
+    console.log("Initializing data fetch");
+    document.getElementById("spinner").style.display = "block";
+
+    const dataUrl = "https://script.google.com/macros/s/AKfycbzO2IRgFoPhFXYDXZij7H7NC5_dRlSzLAwki8s9DJoGToiVbRLFk9-NT8zEy24nqK63lA/exec";
+
+    fetch(dataUrl)
+        .then((response) => {
+            console.log(`Received response with status: ${response.status}`);
+            if (!response.ok) {
+                throw new Error(`Network response was not ok: ${response.statusText}`);
+            }
+            return response.json();
+        })
+        .then((data) => {
+            console.log("Fetched data:", data);
+            buildFamilyTree(data);
+        })
+        .catch((error) => {
+            console.error("Fetch error:", error);
+            document.getElementById("spinner").style.display = "none";
+        });
+});
+
+// Function to build spouse and child connections
 function buildFamilyTree(data) {
-    const svg = d3.select("svg"),
-          width = +svg.attr("width").replace('%', '') * window.innerWidth / 100,
-          height = +svg.attr("height");
+    document.getElementById("spinner").style.display = "none";
 
-    const treeLayout = d3.tree().size([width - 200, height - 200]);
-    const root = d3.hierarchy(data);
-    treeLayout(root);
+    // Assign a unique id for each person
+    data.forEach((person, index) => {
+        person.id = index + 1;
+    });
 
-    // Clear any previous content in the SVG
-    svg.selectAll("*").remove();
+    // Map the data to nodes for FamilyTree.js
+    const nodes = data.map((person) => ({
+        id: person.id,
+        name: `${person.firstName} ${person.lastName}`,
+        img: person.directPhotoUrl.replace("https://drive.google.com/uc?export=view&id=", "https://drive.google.com/thumbnail?id="),
+        pids: [], // Spouse connections
+        mid: null, // Mother's ID
+        fid: null  // Father's ID
+    }));
 
-    // Set up group for centering the tree
-    const g = svg.append("g")
-        .attr("transform", `translate(${width / 2 - 50}, 50)`);
+    // Build spouse connections
+    data.forEach((person) => {
+        if (person.spouseFirstName && person.spouseLastName) {
+            const spouse = data.find(
+                (p) => p.firstName === person.spouseFirstName && p.lastName === person.spouseLastName
+            );
+            if (spouse) {
+                nodes[person.id - 1].pids.push(spouse.id); // Connect spouses
+                nodes[spouse.id - 1].pids.push(person.id); // Ensure both sides are connected
+            }
+        }
+    });
 
-    // Draw links between nodes
-    g.selectAll(".link")
-        .data(root.links())
-        .enter()
-        .append("line")
-        .attr("class", "link")
-        .attr("x1", d => d.source.x)
-        .attr("y1", d => d.source.y)
-        .attr("x2", d => d.target.x)
-        .attr("y2", d => d.target.y)
-        .style("stroke", "#ccc")
-        .style("stroke-width", 2);
+    // Build parent-child connections
+    data.forEach((person) => {
+        const node = nodes[person.id - 1];
+        if (person.motherFirstName && person.fatherFirstName) {
+            const mother = data.find((p) => p.firstName === person.motherFirstName);
+            const father = data.find((p) => p.firstName === person.fatherFirstName);
+            if (mother) node.mid = mother.id; // Connect mother
+            if (father) node.fid = father.id; // Connect father
+        }
+    });
 
-    // Draw nodes and labels
-    const nodes = g.selectAll(".node")
-        .data(root.descendants())
-        .enter()
-        .append("g")
-        .attr("class", "node")
-        .attr("transform", d => `translate(${d.x},${d.y})`);
+    console.log("Final nodes data with automated connections:", nodes);
 
-    nodes.append("circle")
-        .attr("r", 10)
-        .style("fill", "#2ecc71")
-        .style("stroke", "#27ae60")
-        .style("stroke-width", 2);
-
-    nodes.append("text")
-        .attr("dy", -15)
-        .attr("text-anchor", "middle")
-        .text(d => d.data.name)
-        .style("font-size", "14px")
-        .style("fill", "#34495e");
+    // Initialize FamilyTree.js
+    new FamilyTree(document.getElementById("familytree"), {
+        dataSource: nodes,
+        nodeBinding: {
+            field_0: "name",
+            img_0: "img"
+        },
+        mouseScrool: FamilyTree.action.none,
+        nodes: nodes
+    });
 }
-
-  
-  // Fetch and build the family tree
-  fetchFamilyData();
-  
