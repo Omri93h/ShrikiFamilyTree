@@ -53,13 +53,13 @@ document.addEventListener("DOMContentLoaded", () => {
 		})
 		.catch((error) => {
 			console.error("Fetch error:", error);
-			document.getElementById("spinner").style.display = "none";
+			// document.getElementById("spinner").style.display = "none";
 		});
 });
 
 // Function to build spouse and child connections
 function buildFamilyTree(data) {
-	document.getElementById("spinner").style.display = "none";
+	// document.getElementById("spinner").style.display = "none";
 
 	// Assign a unique id for each person
 	data.forEach((person, index) => {

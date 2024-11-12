@@ -92,6 +92,7 @@ text {
     left: 50%;
     transform: translate(-50%, -50%);
     display: none; /* Hidden by default */
+    margin-left: -30px;
 }
 
 @keyframes spin {
@@ -173,5 +174,3 @@ use {
         transform: translate(-50%, -50%);
     }
 }
-
-
