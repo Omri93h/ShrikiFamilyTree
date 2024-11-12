@@ -69,7 +69,15 @@ function buildFamilyTree(data) {
             img_0: "img"
         },
         mouseScrool: FamilyTree.action.none,
-        nodes: nodes
+        nodes: nodes,
+        enableSearch: false,
+        nodeMouseClick: false,
+        partnerNodeSeparation: -119,
+        minPartnerSeparation: 10,
+        levelSeparation: 85,
+        minPartnerSeparation: 10,
+        partnerChildrenSplitSeparation: 1,
+        siblingSeparation: 100
     });
 }
 

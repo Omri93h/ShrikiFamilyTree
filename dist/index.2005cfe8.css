@@ -104,4 +104,12 @@ svg {
   height: 60px;
   margin-bottom: 5px;
 }
+
+use {
+  display: none !important;
+}
+
+path {
+  stroke-width: 2px !important;
+}
 /*# sourceMappingURL=index.2005cfe8.css.map */
