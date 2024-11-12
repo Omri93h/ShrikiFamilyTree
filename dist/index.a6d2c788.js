@@ -8,19 +8,27 @@ style.textContent = `
   }
 `;
 document.head.appendChild(style);
+// Function to adjust dates to local time by adding the offset
+function adjustToLocalTime(dateString) {
+    const date = new Date(dateString);
+    date.setMinutes(date.getMinutes() + date.getTimezoneOffset()); // Adjusts to local time
+    return date;
+}
 // Function to calculate the age if the person is still alive
 function getAge(birthDate) {
-    const birth = new Date(birthDate);
+    const birth = adjustToLocalTime(birthDate);
     const today = new Date();
-    let age = today.getUTCFullYear() - birth.getUTCFullYear();
-    if (today.getUTCMonth() < birth.getUTCMonth() || today.getUTCMonth() === birth.getUTCMonth() && today.getUTCDate() < birth.getUTCDate()) age--;
-    return age.toString(); // Return age as a string
+    let age = today.getFullYear() - birth.getFullYear();
+    if (today.getMonth() < birth.getMonth() || today.getMonth() === birth.getMonth() && today.getDate() < birth.getDate()) age--;
+    return age.toString();
 }
-// Function to get the lifespan in the format "birthYear-deathYear"
+// Function to get the lifespan in the format "birthYear - deathYear"
 function getLifeSpan(birthDate, deathDate) {
-    const birthYear = new Date(birthDate).getUTCFullYear();
-    const deathYear = new Date(deathDate).getUTCFullYear();
-    return `${birthYear} - ${deathYear}`; // Format as "birthYear-deathYear"
+    const birth = adjustToLocalTime(birthDate);
+    const death = adjustToLocalTime(deathDate);
+    const birthYear = birth.getFullYear();
+    const deathYear = death.getFullYear();
+    return `${birthYear} - ${deathYear}`;
 }
 document.addEventListener("DOMContentLoaded", ()=>{
     console.log("Initializing data fetch");
@@ -95,10 +103,6 @@ function buildFamilyTree(data) {
         partnerChildrenSplitSeparation: -5,
         siblingSeparation: 110
     });
-    // Set an initial zoom level if on mobile
-    if (window.innerWidth <= 600) // Adjust the width threshold as needed
-    family.setZoom(0.8); // Set a zoom level that works well on mobile
-    else family.setZoom(1); // Use normal zoom for larger screens
 }
 
 //# sourceMappingURL=index.a6d2c788.js.map
