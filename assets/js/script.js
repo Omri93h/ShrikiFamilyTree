@@ -10,6 +10,30 @@ style.textContent = `
 `;
 document.head.appendChild(style);
 
+// Function to calculate the age if the person is still alive
+function getAge(birthDate) {
+    const birth = new Date(birthDate);
+    const today = new Date();
+
+    let age = today.getUTCFullYear() - birth.getUTCFullYear();
+    if (
+        today.getUTCMonth() < birth.getUTCMonth() ||
+        (today.getUTCMonth() === birth.getUTCMonth() && today.getUTCDate() < birth.getUTCDate())
+    ) {
+        age--;
+    }
+
+    return age.toString(); // Return age as a string
+}
+
+// Function to get the lifespan in the format "birthYear-deathYear"
+function getLifeSpan(birthDate, deathDate) {
+    const birthYear = new Date(birthDate).getUTCFullYear();
+    const deathYear = new Date(deathDate).getUTCFullYear();
+    return `${birthYear}-${deathYear}`; // Format as "birthYear-deathYear"
+}
+
+
 document.addEventListener("DOMContentLoaded", () => {
     console.log("Initializing data fetch");
     document.getElementById("spinner").style.display = "block";
@@ -50,7 +74,8 @@ function buildFamilyTree(data) {
         img: person.directPhotoUrl.replace("https://drive.google.com/uc?export=view&id=", "https://drive.google.com/thumbnail?id="),
         pids: [], // Spouse connections
         mid: null, // Mother's ID
-        fid: null  // Father's ID
+        fid: null,  // Father's ID
+        age: person.deathDate == ""? "גיל: " + getAge(person.birthDate) : getLifeSpan(person.birthDate, person.deathDate)
     }));
 
     // Build spouse connections
@@ -81,9 +106,11 @@ function buildFamilyTree(data) {
 
     // Initialize FamilyTree.js
     new FamilyTree(document.getElementById("familytree"), {
+        template: 'john',
         dataSource: nodes,
         nodeBinding: {
             field_0: "name",
+            field_1: "age",
             img_0: "img"
         },
         mouseScrool: FamilyTree.action.none,
@@ -91,10 +118,12 @@ function buildFamilyTree(data) {
         enableSearch: false,
         nodeMouseClick: false,
         partnerNodeSeparation: -119,
-        levelSeparation: 70,
+        levelSeparation: 60,
         minPartnerSeparation: 20,
-        partnerChildrenSplitSeparation: 1,
+        partnerChildrenSplitSeparation: -5,
         siblingSeparation: 110
 
     });
+
+    
 }

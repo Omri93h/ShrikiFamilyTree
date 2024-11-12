@@ -1,69 +1,85 @@
-/* Body styling */
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f7f9fc;
+/* Full viewport height setup */
+html, body {
+    height: 100%;
+    overflow: hidden; /* Prevents outer scrolling */
     margin: 0;
-    padding: 20px;
+    padding: 0;
     display: flex;
-    justify-content: center;
-    align-items: center;
     flex-direction: column;
 }
 
+/* Main container for centered alignment */
 .container {
-    width: 100%;
-    text-align: center;
-    margin: 0 auto;
+    flex: 1; /* Fills remaining space between header and footer */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden; /* Prevents inner scroll */
+    padding: 0 10px; /* Adjust as needed */
 }
 
+/* Family tree container to occupy remaining space */
+#familytree {
+    flex: 1; /* Takes up remaining space in container */
+    width: 100%;
+    overflow: hidden; /* Prevents inner scrolling */
+    padding-bottom: 20px; /* Adds space from the bottom */
+}
+
+/* Header styling */
 h1 {
     color: #2c3e50;
-    margin-bottom: 10px;
+    margin: 0;
+    font-size: 2rem;
+    font-family: 'Poppins', sans-serif;
 }
 
-.form-link {
+h4 {
+    margin: 5px; /* Margin adjustment for spacing */
+    font-size: 1rem;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Link styling */
+h4 a {
+    font-size: 0.9rem;
     display: inline-block;
-    margin: 15px 0;
-    padding: 10px 20px;
+    margin: 5px 0;
+    padding: 8px 16px; /* Smaller padding */
     background-color: #3498db;
     color: #fff;
     text-decoration: none;
     border-radius: 5px;
     transition: background-color 0.3s ease;
+    font-family: 'Poppins', sans-serif;
 }
 
-.form-link:hover {
+h4 a:hover {
     background-color: #2980b9;
 }
 
 /* Family tree SVG styling */
 svg {
     width: 100%;
-    height: 800px; /* Adjust height as needed */
+    height: 100%; /* Ensures SVG takes full container height */
     border: 1px solid #ddd;
     background-color: #ffffff;
     border-radius: 10px;
-    overflow: visible;
+    padding-bottom: 20px; /* Extra space below the nodes inside the SVG */
 }
 
-/* Node styling */
-.node circle {
-    fill: #2ecc71;
-    stroke: #27ae60;
-    stroke-width: 2px;
+/* Custom path and text styles */
+path {
+    stroke-width: 2px !important;
+    stroke: #2c3e50; /* Custom color */
 }
 
-.node text {
-    font-size: 12px;
-    fill: #34495e;
+text {
+    fill: #2c3e50; /* Custom color */
 }
 
-.link {
-    stroke: #bdc3c7;
-    stroke-width: 2px;
-}
-
-/* Loading spinner */
+/* Loading spinner centered on screen */
 .spinner {
     border: 8px solid #f3f3f3;
     border-top: 8px solid #3498db;
@@ -83,39 +99,80 @@ svg {
     100% { transform: rotate(360deg); }
 }
 
-
-/* Ensure the container's dimensions and prevent overflow */
-#familytree {
-    width: 100%;
-    height: 800px;
-    overflow: hidden;
-}
-
-/* Style for the nodes */
+/* Custom FamilyTree node styling */
 .familytree .node {
     text-align: center;
     border-radius: 10px;
     background-color: #f5f5f5;
     padding: 10px;
     box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+    margin-bottom: 15px; /* Increased space between nodes */
 }
 
-/* Style for the images within nodes */
 .familytree .node img {
-    width: 60px;    /* Set fixed size for images */
+    width: 60px;
     height: 60px;
     border-radius: 50%;
     margin-bottom: 5px;
 }
 
+/* Hide unused UI elements */
 use {
     display: none !important;
 }
 
-path {
-    stroke-width: 2px !important;
+
+/* Flex container for header row */
+.header-row {
+    display: flex;
+    justify-content: space-between; /* Places h4 to the left and h1 to the right */
+    align-items: center;
+    width: 100%;
+    padding: 0 10px; /* Padding for spacing */
 }
 
-text {
-    font-size: 24px !important;
+/* h1 styling within header row */
+.header-row h1 {
+    color: #2c3e50;
+    margin: 0;
+    font-size: 2rem;
+    font-family: 'Poppins', sans-serif;
 }
+
+/* h4 styling within header row */
+.header-row h4 {
+    margin: 0;
+    font-size: 1rem;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Link styling within h4 */
+.header-row h4 a {
+    font-size: 0.9rem;
+    background-color: #3498db;
+    color: #fff;
+    text-decoration: none;
+    padding: 8px 16px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.header-row h4 a:hover {
+    background-color: #2980b9;
+}
+
+
+
+
+/* Make all paths thicker and closer to nodes */
+.familytree path {
+    stroke-width: 2.5px !important; /* Adjust line thickness */
+    stroke: #2c3e50; /* Line color */
+}
+
+/* Additional scaling if the lines need to appear longer */
+.familytree path {
+    transform: scale(1.05); /* Slightly increase both width and height of paths */
+    transform-origin: center;
+}
+
