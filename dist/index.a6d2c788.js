@@ -95,6 +95,10 @@ function buildFamilyTree(data) {
         partnerChildrenSplitSeparation: -5,
         siblingSeparation: 110
     });
+    // Set an initial zoom level if on mobile
+    if (window.innerWidth <= 600) // Adjust the width threshold as needed
+    family.setZoom(0.8); // Set a zoom level that works well on mobile
+    else family.setZoom(1); // Use normal zoom for larger screens
 }
 
 //# sourceMappingURL=index.a6d2c788.js.map

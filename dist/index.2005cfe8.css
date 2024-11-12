@@ -150,4 +150,12 @@ use {
 .header-row h4 a:hover {
   background-color: #2980b9;
 }
+
+@media (width <= 600px) {
+  .spinner {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+}
 /*# sourceMappingURL=index.2005cfe8.css.map */
