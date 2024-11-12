@@ -11,7 +11,7 @@ document.head.appendChild(style);
 document.addEventListener("DOMContentLoaded", ()=>{
     console.log("Initializing data fetch");
     document.getElementById("spinner").style.display = "block";
-    const dataUrl = "https://script.google.com/macros/s/AKfycbzO2IRgFoPhFXYDXZij7H7NC5_dRlSzLAwki8s9DJoGToiVbRLFk9-NT8zEy24nqK63lA/exec";
+    const dataUrl = "https://script.google.com/macros/s/AKfycbxiDq8HBnd3RaL-CGWnOEKL8aensNv23kmeBxl7ihaBD73go0tyOmwYd74_dhLwbuZQbw/exec";
     fetch(dataUrl).then((response)=>{
         console.log(`Received response with status: ${response.status}`);
         if (!response.ok) throw new Error(`Network response was not ok: ${response.statusText}`);
@@ -73,11 +73,10 @@ function buildFamilyTree(data) {
         enableSearch: false,
         nodeMouseClick: false,
         partnerNodeSeparation: -119,
-        minPartnerSeparation: 10,
-        levelSeparation: 85,
-        minPartnerSeparation: 10,
+        levelSeparation: 70,
+        minPartnerSeparation: 20,
         partnerChildrenSplitSeparation: 1,
-        siblingSeparation: 100
+        siblingSeparation: 110
     });
 }
 
