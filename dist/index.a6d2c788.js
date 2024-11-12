@@ -76,9 +76,12 @@ function buildFamilyTree(data) {
     // Build parent-child connections
     data.forEach((person)=>{
         const node = nodes[person.id - 1];
-        if (person.motherFirstName && person.fatherFirstName) {
-            const mother = data.find((p)=>p.firstName === person.motherFirstName);
-            const father = data.find((p)=>p.firstName === person.fatherFirstName);
+        // Use only the first name in motherFirstName and fatherFirstName fields
+        const motherFirstName = person.motherFirstName.split(" ")[0];
+        const fatherFirstName = person.fatherFirstName.split(" ")[0];
+        if (motherFirstName && fatherFirstName) {
+            const mother = data.find((p)=>p.firstName === motherFirstName);
+            const father = data.find((p)=>p.firstName === fatherFirstName);
             if (mother) node.mid = mother.id; // Connect mother
             if (father) node.fid = father.id; // Connect father
         }
