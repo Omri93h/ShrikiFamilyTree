@@ -164,15 +164,4 @@ use {
 
 
 
-/* Make all paths thicker and closer to nodes */
-.familytree path {
-    stroke-width: 2.5px !important; /* Adjust line thickness */
-    stroke: #2c3e50; /* Line color */
-}
-
-/* Additional scaling if the lines need to appear longer */
-.familytree path {
-    transform: scale(1.05); /* Slightly increase both width and height of paths */
-    transform-origin: center;
-}
 

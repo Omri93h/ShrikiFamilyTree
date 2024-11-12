@@ -150,11 +150,4 @@ use {
 .header-row h4 a:hover {
   background-color: #2980b9;
 }
-
-.familytree path {
-  stroke: #2c3e50;
-  transform-origin: center;
-  transform: scale(1.05);
-  stroke-width: 2.5px !important;
-}
 /*# sourceMappingURL=index.2005cfe8.css.map */
