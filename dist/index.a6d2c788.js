@@ -1,4 +1,3 @@
-// import FamilyTree from "@balkangraph/familytree.js";
 // Add basic FamilyTree CSS manually
 const style = document.createElement("style");
 style.textContent = `
