@@ -115,3 +115,7 @@ use {
 path {
     stroke-width: 2px !important;
 }
+
+text {
+    font-size: 24px !important;
+}
