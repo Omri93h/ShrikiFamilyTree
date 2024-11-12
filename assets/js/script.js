@@ -29,7 +29,7 @@ function getAge(birthDate) {
 function getLifeSpan(birthDate, deathDate) {
 	const birthYear = new Date(birthDate).getUTCFullYear();
 	const deathYear = new Date(deathDate).getUTCFullYear();
-	return `${birthYear}-${deathYear}`; // Format as "birthYear-deathYear"
+	return `${birthYear} - ${deathYear}`; // Format as "birthYear-deathYear"
 }
 
 document.addEventListener("DOMContentLoaded", () => {
