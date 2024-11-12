@@ -37,7 +37,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	document.getElementById("spinner").style.display = "block";
 
 	const dataUrl =
-		"https://script.google.com/macros/s/AKfycbxiDq8HBnd3RaL-CGWnOEKL8aensNv23kmeBxl7ihaBD73go0tyOmwYd74_dhLwbuZQbw/exec";
+		"https://script.google.com/macros/s/AKfycbw0B39BCAg0-LR-81NwcCzS4_JACvMYd8Bg_HN3mBsyl37ZJ2zYgBm6ONA24RzqyGIkrg/exec";
 
 	fetch(dataUrl)
 		.then((response) => {
