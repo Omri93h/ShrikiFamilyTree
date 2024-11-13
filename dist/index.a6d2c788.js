@@ -1,13 +1,3 @@
-// Add basic FamilyTree CSS manually
-const style = document.createElement("style");
-style.textContent = `
-  #familytree .balkangraph-node { /* Basic FamilyTree node styling */
-      border: 1px solid #ddd;
-      border-radius: 5px;
-      box-shadow: 0 0 5px rgba(0,0,0,0.1);
-  }
-`;
-document.head.appendChild(style);
 // Function to adjust dates to local time by adding the offset
 function adjustToLocalTime(dateString) {
     const date = new Date(dateString);
@@ -30,6 +20,72 @@ function getLifeSpan(birthDate, deathDate) {
     const deathYear = death.getFullYear();
     return `${birthYear} - ${deathYear}`;
 }
+function buildParentConnections(data, nodes) {
+    data.forEach((person)=>{
+        const node = nodes[person.id - 1];
+        const motherFirstName = person.motherFirstName.split(" ")[0];
+        const fatherFirstName = person.fatherFirstName.split(" ")[0];
+        if (motherFirstName && fatherFirstName) {
+            // Find all potential mothers and fathers with matching first names
+            const potentialMothers = data.filter((p)=>p.firstName === motherFirstName);
+            const potentialFathers = data.filter((p)=>p.firstName === fatherFirstName);
+            // Identify mother-father pairs that are spouses
+            let mother = null;
+            let father = null;
+            for (let m of potentialMothers){
+                for (let f of potentialFathers)// Check if the mother-father pair are spouses
+                if (nodes[m.id - 1].pids.includes(f.id)) {
+                    mother = m;
+                    father = f;
+                    break;
+                }
+                if (mother && father) break;
+            }
+            // Assign the mother and father IDs if a matching spouse pair is found
+            if (mother) node.mid = mother.id;
+            if (father) node.fid = father.id;
+        }
+    });
+    // Sort children by birth date for each parent-child group
+    data.forEach((person)=>{
+        const motherFirstName = person.motherFirstName.split(" ")[0];
+        const fatherFirstName = person.fatherFirstName.split(" ")[0];
+        if (motherFirstName && fatherFirstName) {
+            let children = data.filter((child)=>child.motherFirstName && child.motherFirstName.split(" ")[0] === motherFirstName && child.fatherFirstName && child.fatherFirstName.split(" ")[0] === fatherFirstName);
+            children.sort((a, b)=>new Date(a.birthDate) - new Date(b.birthDate));
+            // Update children in nodes by order of birth date
+            children.forEach((child, index)=>{
+                nodes[child.id - 1].siblingOrder = index;
+            });
+        }
+    });
+    // Reorder the nodes array based on sibling order for visualization
+    nodes.sort((a, b)=>(a.siblingOrder || 0) - (b.siblingOrder || 0));
+}
+function buildSpouseConnections(data, nodes) {
+    // Build spouse connections
+    data.forEach((person)=>{
+        if (person.spouseFirstName && person.spouseLastName) {
+            const spouse = data.find((p)=>p.firstName === person.spouseFirstName && p.lastName === person.spouseLastName);
+            if (spouse) {
+                nodes[person.id - 1].pids.push(spouse.id); // Connect spouses
+                nodes[spouse.id - 1].pids.push(person.id); // Ensure both sides are connected
+            }
+        }
+    });
+}
+function buildNodes(data) {
+    const nodes = data.map((person)=>({
+            id: person.id,
+            name: `${person.firstName} ${person.lastName}`,
+            img: person.directPhotoUrl.replace("https://drive.google.com/uc?export=view&id=", "https://drive.google.com/thumbnail?id="),
+            pids: [],
+            mid: null,
+            fid: null,
+            age: person.deathDate == "" ? "\u05D2\u05D9\u05DC: " + getAge(person.birthDate) : getLifeSpan(person.birthDate, person.deathDate)
+        }));
+    return nodes;
+}
 document.addEventListener("DOMContentLoaded", ()=>{
     console.log("Initializing data fetch");
     document.getElementById("spinner").style.display = "block";
@@ -43,52 +99,24 @@ document.addEventListener("DOMContentLoaded", ()=>{
         buildFamilyTree(data);
     }).catch((error)=>{
         console.error("Fetch error:", error);
-    // document.getElementById("spinner").style.display = "none";
+        document.getElementById("spinner").style.display = "none";
     });
 });
-// Function to build spouse and child connections
 function buildFamilyTree(data) {
-    // document.getElementById("spinner").style.display = "none";
+    document.getElementById("spinner").style.display = "none";
     // Assign a unique id for each person
     data.forEach((person, index)=>{
         person.id = index + 1;
     });
     // Map the data to nodes for FamilyTree.js
-    const nodes = data.map((person)=>({
-            id: person.id,
-            name: `${person.firstName} ${person.lastName}`,
-            img: person.directPhotoUrl.replace("https://drive.google.com/uc?export=view&id=", "https://drive.google.com/thumbnail?id="),
-            pids: [],
-            mid: null,
-            fid: null,
-            age: person.deathDate == "" ? "\u05D2\u05D9\u05DC: " + getAge(person.birthDate) : getLifeSpan(person.birthDate, person.deathDate)
-        }));
-    // Build spouse connections
-    data.forEach((person)=>{
-        if (person.spouseFirstName && person.spouseLastName) {
-            const spouse = data.find((p)=>p.firstName === person.spouseFirstName && p.lastName === person.spouseLastName);
-            if (spouse) {
-                nodes[person.id - 1].pids.push(spouse.id); // Connect spouses
-                nodes[spouse.id - 1].pids.push(person.id); // Ensure both sides are connected
-            }
-        }
-    });
-    // Build parent-child connections
-    data.forEach((person)=>{
-        const node = nodes[person.id - 1];
-        // Use only the first name in motherFirstName and fatherFirstName fields
-        const motherFirstName = person.motherFirstName.split(" ")[0];
-        const fatherFirstName = person.fatherFirstName.split(" ")[0];
-        if (motherFirstName && fatherFirstName) {
-            const mother = data.find((p)=>p.firstName === motherFirstName);
-            const father = data.find((p)=>p.firstName === fatherFirstName);
-            if (mother) node.mid = mother.id; // Connect mother
-            if (father) node.fid = father.id; // Connect father
-        }
-    });
-    console.log("Final nodes data with automated connections:", nodes);
-    // Initialize FamilyTree.js
-    new FamilyTree(document.getElementById("familytree"), {
+    const nodes = buildNodes(data);
+    buildSpouseConnections(data, nodes);
+    buildParentConnections(data, nodes);
+    // temp hard coded fix - need to fix later!
+    nodes[0]["pids"].pop();
+    nodes[1]["pids"].pop();
+    // Initialize FamilyTree.js with custom sibling spacing
+    new FamilyTree(document.getElementById("tree"), {
         template: "john",
         dataSource: nodes,
         nodeBinding: {
@@ -101,10 +129,8 @@ function buildFamilyTree(data) {
         enableSearch: false,
         nodeMouseClick: false,
         partnerNodeSeparation: -119,
-        levelSeparation: 60,
-        minPartnerSeparation: 20,
-        partnerChildrenSplitSeparation: -5,
-        siblingSeparation: 110
+        levelSeparation: 80,
+        minPartnerSeparation: 20
     });
 }
 
