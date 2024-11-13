@@ -89,7 +89,7 @@ function buildNodes(data) {
 document.addEventListener("DOMContentLoaded", ()=>{
     console.log("Initializing data fetch");
     document.getElementById("spinner").style.display = "block";
-    const dataUrl = "https://script.google.com/macros/s/AKfycbw0B39BCAg0-LR-81NwcCzS4_JACvMYd8Bg_HN3mBsyl37ZJ2zYgBm6ONA24RzqyGIkrg/exec";
+    const dataUrl = "https://script.google.com/macros/s/AKfycbyTqzU-lZ2XFk6xvkwKqQq8eGHOX85k1hDxy1-Qj1Pw9KDQcvfKTQELQImNpenELfa9ew/exec";
     fetch(dataUrl).then((response)=>{
         console.log(`Received response with status: ${response.status}`);
         if (!response.ok) throw new Error(`Network response was not ok: ${response.statusText}`);
