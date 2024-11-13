@@ -124,7 +124,7 @@ function buildFamilyTree(data) {
             field_1: "age",
             img_0: "img"
         },
-        mouseScrool: FamilyTree.action.none,
+        // mouseScrool: FamilyTree.action.none,
         nodes: nodes,
         enableSearch: false,
         nodeMouseClick: false,
@@ -132,6 +132,7 @@ function buildFamilyTree(data) {
         levelSeparation: 80,
         minPartnerSeparation: 20
     });
+    console.log("Final Nodes:", nodes);
 }
 
 //# sourceMappingURL=index.a6d2c788.js.map
