@@ -1,4 +1,4 @@
-GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwwn8WzoDulRRvdcHdggdGYtEJ7iwSHQ6-56dRKkKnXkwLtZE9mz6WuzIoinjhQthXM4g/exec'
+GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxn2onZqiyTpulQTJsjSWgXDTJYN0bd9vKz4vjiiyMqKWlzRwCgggrM2dC1RZ_miroZBQ/exec'
 
 document.addEventListener('DOMContentLoaded', function () {
 	fetch(GOOGLE_SCRIPT_URL)

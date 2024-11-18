@@ -122,7 +122,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	document.getElementById("spinner").style.display = "block";
 
 	const dataUrl =
-		"https://script.google.com/macros/s/AKfycbwwn8WzoDulRRvdcHdggdGYtEJ7iwSHQ6-56dRKkKnXkwLtZE9mz6WuzIoinjhQthXM4g/exec";
+		"https://script.google.com/macros/s/AKfycbxn2onZqiyTpulQTJsjSWgXDTJYN0bd9vKz4vjiiyMqKWlzRwCgggrM2dC1RZ_miroZBQ/exec";
 
 	fetch(dataUrl)
 		.then((response) => {
