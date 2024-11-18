@@ -1,12 +1,56 @@
 GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxn2onZqiyTpulQTJsjSWgXDTJYN0bd9vKz4vjiiyMqKWlzRwCgggrM2dC1RZ_miroZBQ/exec";
+// Global variable to store fetched people data
+var peopleData = [];
 document.addEventListener("DOMContentLoaded", function() {
     fetch(GOOGLE_SCRIPT_URL).then((response)=>response.json()).then((data)=>{
         console.log("Fetched Data:", data);
-    // You can perform additional operations with the data here
+        // Store the fetched data
+        peopleData = data;
+        // Sort the peopleData by firstName in Hebrew alphabetical order
+        peopleData.sort(function(a, b) {
+            return a.firstName.localeCompare(b.firstName, "he");
+        });
+        // Populate the spouse, mother, and father dropdowns
+        populateSpouseDropdown(peopleData);
+        populateMotherDropdown(peopleData);
+        populateFatherDropdown(peopleData);
     }).catch((error)=>{
         console.error("Error fetching data:", error);
     });
 });
+function populateSpouseDropdown(people) {
+    var spouseSelect = document.getElementById("spouseSelect");
+    // Clear existing options except the first one
+    spouseSelect.options.length = 1;
+    people.forEach(function(person, index) {
+        var option = document.createElement("option");
+        option.value = index; // Use the index as the value
+        option.text = `${person.firstName} ${person.lastName}`;
+        spouseSelect.add(option);
+    });
+}
+function populateMotherDropdown(people) {
+    var motherSelect = document.getElementById("motherSelect");
+    // Clear existing options except the first one
+    motherSelect.options.length = 1;
+    people.forEach(function(person, index) {
+        var option = document.createElement("option");
+        option.value = index; // Use the index as the value
+        option.text = `${person.firstName} ${person.lastName}`;
+        motherSelect.add(option);
+    });
+}
+function populateFatherDropdown(people) {
+    var fatherSelect = document.getElementById("fatherSelect");
+    // Clear existing options except the first one
+    fatherSelect.options.length = 1;
+    people.forEach(function(person, index) {
+        var option = document.createElement("option");
+        option.value = index; // Use the index as the value
+        option.text = `${person.firstName} ${person.lastName}`;
+        fatherSelect.add(option);
+    });
+}
 // Image preview functionality
 document.getElementById("faceImage").addEventListener("change", function(event) {
     var reader = new FileReader();
@@ -28,18 +72,16 @@ function toggleBloodFields() {
         bloodYesFields.style.display = "block";
         bloodNoFields.style.display = "none";
         // Set required attributes
-        document.getElementById("motherFirstName").setAttribute("required", "required");
-        document.getElementById("fatherFirstName").setAttribute("required", "required");
-        document.getElementById("spouseFirstName").removeAttribute("required");
-        document.getElementById("spouseLastName").removeAttribute("required");
+        document.getElementById("motherSelect").setAttribute("required", "required");
+        document.getElementById("fatherSelect").setAttribute("required", "required");
+        document.getElementById("spouseSelect").removeAttribute("required");
     } else {
         bloodYesFields.style.display = "none";
         bloodNoFields.style.display = "block";
         // Set required attributes
-        document.getElementById("spouseFirstName").setAttribute("required", "required");
-        document.getElementById("spouseLastName").setAttribute("required", "required");
-        document.getElementById("motherFirstName").removeAttribute("required");
-        document.getElementById("fatherFirstName").removeAttribute("required");
+        document.getElementById("spouseSelect").setAttribute("required", "required");
+        document.getElementById("motherSelect").removeAttribute("required");
+        document.getElementById("fatherSelect").removeAttribute("required");
     }
 }
 // Form submission handling
@@ -56,6 +98,41 @@ document.getElementById("familyForm").addEventListener("submit", function(e) {
     // Map bloodConnection value from English to Hebrew
     if (data.bloodConnection === "Yes") data.bloodConnection = "\u05DB\u05DF";
     else if (data.bloodConnection === "No") data.bloodConnection = "\u05DC\u05D0";
+    // If bloodConnection is 'לא' (No), handle spouse selection
+    if (data.bloodConnection === "\u05DC\u05D0" && data.spouseSelect) {
+        var spouseIndex = data.spouseSelect;
+        var spousePerson = peopleData[spouseIndex];
+        if (spousePerson) {
+            data.spouseFirstName = spousePerson.firstName;
+            data.spouseLastName = spousePerson.lastName;
+        } else {
+            data.spouseFirstName = "";
+            data.spouseLastName = "";
+        }
+    }
+    // Remove spouseSelect from data since we now have spouseFirstName and spouseLastName
+    delete data.spouseSelect;
+    // If bloodConnection is 'כן' (Yes), handle mother and father selection
+    if (data.bloodConnection === "\u05DB\u05DF") {
+        // Mother
+        if (data.motherSelect) {
+            var motherIndex = data.motherSelect;
+            var motherPerson = peopleData[motherIndex];
+            if (motherPerson) data.motherFirstName = motherPerson.firstName;
+            else data.motherFirstName = "";
+        }
+        // Father
+        if (data.fatherSelect) {
+            var fatherIndex = data.fatherSelect;
+            var fatherPerson = peopleData[fatherIndex];
+            if (fatherPerson) data.fatherFirstName = fatherPerson.firstName;
+            else data.fatherFirstName = "";
+        }
+    }
+    // Remove motherSelect and fatherSelect from data since we now have motherFirstName and fatherFirstName
+    delete data.motherSelect;
+    delete data.fatherSelect;
+    // Existing code to handle image and send data...
     var fileInput = document.getElementById("faceImage");
     var file = fileInput.files[0];
     if (file) {

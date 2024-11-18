@@ -4,14 +4,14 @@ body {
     overflow-x: hidden;
     margin: 0;
     padding: 0;
-    padding-bottom: 10%;
+    padding-bottom: 40px !important;
 }
 
 /* Center the container */
 .container {
     max-width: 600px;
     margin: auto;
-    padding-top: 20px;
+    padding-bottom: 20px !important;
 }
 
 /* Form labels */
@@ -34,6 +34,7 @@ label {
     /* Ensure form labels and inputs are full width */
     .form-group {
         width: 100%;
+        padding-bottom: 10% !important;
     }
 
     /* Center align the submit button text */
@@ -45,6 +46,7 @@ label {
     #thumbnail {
         margin: 10px auto;
     }
+    
 }
 
 /* Style for the conditional fields */
@@ -72,9 +74,12 @@ h2 {
 .btn-primary {
     background-color: #3498db;
     border-color: #3498db;
+    padding-bottom: 10% !important;
 }
 
 .btn-primary:hover {
     background-color: #2980b9;
     border-color: #2980b9;
 }
+
+
