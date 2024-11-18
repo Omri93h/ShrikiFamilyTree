@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>הוספת בן משפחה</title>
+  <!-- Bootstrap RTL CSS -->
+  <link rel="stylesheet" href="https://cdn.rtlcss.com/bootstrap/v4.5.3/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="assets/css/spinner.css">
+  <!-- Custom CSS -->
+  <style>
+    /* Your custom styles */
+    #thumbnail {
+      display: block;
+      width: 108px;
+      height: 108px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-top: 10px;
+    }
+
+    /* Add any additional styles here */
+  </style>
+</head>
+
+<body>
+  <div id="spinner" class="spinner"></div>
+
+  <div class="container mt-5">
+    <h2 class="text-center">הוספת בן משפחה</h2>
+    <form id="familyForm">
+      <!-- First Name and Last Name -->
+      <div class="form-row">
+        <!-- First Name -->
+        <div class="form-group col-md-6">
+          <label for="firstName">*שם פרטי</label>
+          <input type="text" class="form-control text-right" id="firstName" name="firstName" required />
+        </div>
+        <!-- Last Name -->
+        <div class="form-group col-md-6">
+          <label for="lastName">*שם משפחה</label>
+          <input type="text" class="form-control text-right" id="lastName" name="lastName" required />
+        </div>
+      </div>
+      <!-- Birth Date and Death Date -->
+      <div class="form-row">
+        <!-- Birth Date -->
+        <div class="form-group col-md-6">
+          <label for="birthDate">*תאריך לידה</label>
+          <input type="date" class="form-control text-right" id="birthDate" name="birthDate" required />
+        </div>
+        <!-- Death Date -->
+        <div class="form-group col-md-6">
+          <label for="deathDate">תאריך פטירה</label>
+          <input type="date" class="form-control text-right" id="deathDate" name="deathDate" />
+        </div>
+      </div>
+      <!-- Face Image -->
+      <div class="form-group">
+        <label for="faceImage">תמונת פנים</label>
+        <input type="file" class="form-control-file" id="faceImage" name="faceImage" accept="image/*" />
+        <img id="thumbnail" src="#" alt="תצוגה מקדימה של התמונה" style="display: none;" />
+      </div>
+      <!-- Blood Connection -->
+      <div class="form-group">
+        <label>*קרבת דם</label><br />
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="bloodConnection" id="bloodYes" value="Yes" required />
+          <label class="form-check-label" for="bloodYes">כן</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="bloodConnection" id="bloodNo" value="No" required />
+          <label class="form-check-label" for="bloodNo">לא</label>
+        </div>
+      </div>
+      <!-- Conditional Fields Start -->
+      <!-- Fields for Blood Relation "Yes" -->
+      <div id="bloodYesFields" style="display: none;">
+        <!-- Mother's First Name -->
+        <div class="form-group">
+          <label for="motherFirstName">*שם פרטי של האם</label>
+          <input type="text" class="form-control text-right" id="motherFirstName" name="motherFirstName" />
+        </div>
+        <!-- Father's First Name -->
+        <div class="form-group">
+          <label for="fatherFirstName">*שם פרטי של האב</label>
+          <input type="text" class="form-control text-right" id="fatherFirstName" name="fatherFirstName" />
+        </div>
+      </div>
+      <!-- Fields for Blood Relation "No" -->
+      <div id="bloodNoFields" style="display: none;">
+        <!-- Spouse/Divorced Full Name -->
+        <div class="form-group">
+          <label for="spouseFirstName">*השם הפרטי של בעלי/אשתי (או הגרוש/ה שלי) כפי שמופיע בעץ המשפחה!</label>
+          <input type="text" class="form-control text-right" id="spouseFirstName" name="spouseFirstName" />
+        </div>
+        <div class="form-group">
+          <label for="spouseLastName">*שם המשפחה של בעלי/אשתי (או הגרוש/ה שלי) כפי שמופיע בעץ המשפחה!</label>
+          <input type="text" class="form-control text-right" id="spouseLastName" name="spouseLastName" />
+        </div>
+      </div>
+      <!-- Conditional Fields End -->
+      <div id="errorDiv" style="display: none;"></div>
+
+      <!-- Submit Button -->
+      <button type="submit" class="btn btn-primary btn-block">שלח</button>
+    </form>
+  </div>
+
+  <!-- Include jQuery and Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <!-- Your custom script -->
+  <script src="assets/js/form.js"></script>
+</body>
+
+</html>

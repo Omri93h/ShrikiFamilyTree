@@ -1,0 +1,80 @@
+/* Allow scrolling and set direction */
+body {
+    direction: rtl;
+    overflow-x: hidden;
+    margin: 0;
+    padding: 0;
+    padding-bottom: 10%;
+}
+
+/* Center the container */
+.container {
+    max-width: 600px;
+    margin: auto;
+    padding-top: 20px;
+}
+
+/* Form labels */
+label {
+    font-weight: bold;
+}
+
+/* Image thumbnail styling */
+#thumbnail {
+    display: block;
+    width: 108px;
+    height: 108px;
+    border-radius: 50%; /* Makes the image a circle */
+    object-fit: cover; /* Ensures the image covers the container */
+    margin-top: 10px;
+}
+
+/* Adjustments for mobile devices */
+@media (max-width: 767.98px) {
+    /* Ensure form labels and inputs are full width */
+    .form-group {
+        width: 100%;
+    }
+
+    /* Center align the submit button text */
+    .btn-block {
+        text-align: center;
+    }
+
+    /* Adjust image preview on mobile */
+    #thumbnail {
+        margin: 10px auto;
+    }
+}
+
+/* Style for the conditional fields */
+#bloodYesFields, #bloodNoFields {
+    margin-top: 20px;
+}
+
+/* Ensure text fields are right-aligned */
+input[type="text"], input[type="date"] {
+    text-align: right;
+}
+
+/* Form header */
+h2 {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+/* Adjustments for form check labels (radio buttons) */
+.form-check-label {
+    margin-right: 5px;
+}
+
+/* Button styling */
+.btn-primary {
+    background-color: #3498db;
+    border-color: #3498db;
+}
+
+.btn-primary:hover {
+    background-color: #2980b9;
+    border-color: #2980b9;
+}

@@ -52,14 +52,17 @@ svg {
 h1 {
     color: #2c3e50;
     margin: 0;
-    font-size: 2rem;
+    font-size: 1.9rem !important;
     font-family: 'Poppins', sans-serif;
+    /* font-size: 14px !important; */
+    text-align: right;
 }
 
 h4 {
     margin: 5px; /* Margin adjustment for spacing */
     font-size: 1rem;
     font-family: 'Poppins', sans-serif;
+    text-align: center;
 }
 
 /* Link styling */
@@ -92,26 +95,6 @@ text {
     fill: #2c3e50; /* Custom color */
 }
 
-/* Loading spinner centered on screen */
-.spinner {
-    border: 8px solid #f3f3f3;
-    border-top: 8px solid #3498db;
-    border-radius: 50%;
-    width: 60px;
-    height: 60px;
-    animation: spin 1s linear infinite;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    display: none; /* Hidden by default */
-    margin-left: -30px;
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
 
 
 
@@ -162,13 +145,3 @@ text {
 
 
 
-
-
-/* Center the spinner on mobile */
-@media (max-width: 600px) {
-    .spinner {
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-    }
-}

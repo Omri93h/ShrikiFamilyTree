@@ -1,0 +1,67 @@
+body {
+  direction: rtl;
+  margin: 0;
+  padding: 0 0 10%;
+  overflow-x: hidden;
+}
+
+.container {
+  max-width: 600px;
+  margin: auto;
+  padding-top: 20px;
+}
+
+label {
+  font-weight: bold;
+}
+
+#thumbnail {
+  object-fit: cover;
+  border-radius: 50%;
+  width: 108px;
+  height: 108px;
+  margin-top: 10px;
+  display: block;
+}
+
+@media (width <= 767.98px) {
+  .form-group {
+    width: 100%;
+  }
+
+  .btn-block {
+    text-align: center;
+  }
+
+  #thumbnail {
+    margin: 10px auto;
+  }
+}
+
+#bloodYesFields, #bloodNoFields {
+  margin-top: 20px;
+}
+
+input[type="text"], input[type="date"] {
+  text-align: right;
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.form-check-label {
+  margin-right: 5px;
+}
+
+.btn-primary {
+  background-color: #3498db;
+  border-color: #3498db;
+}
+
+.btn-primary:hover {
+  background-color: #2980b9;
+  border-color: #2980b9;
+}
+/*# sourceMappingURL=form.51aa5a6b.css.map */
