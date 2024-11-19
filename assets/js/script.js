@@ -5,6 +5,7 @@ function adjustToLocalTime(dateString) {
 	return date;
 }
 
+
 // Function to calculate the age if the person is still alive
 function getAge(birthDate) {
 	const birth = adjustToLocalTime(birthDate);
@@ -159,6 +160,7 @@ function buildFamilyTree(data) {
 	// temp hard coded fix - need to fix later!
 	nodes[0]["pids"].pop();
 	nodes[1]["pids"].pop();
+	
 
 	// Initialize FamilyTree.js with custom sibling spacing
 	new FamilyTree(document.getElementById("tree"), {
@@ -171,12 +173,13 @@ function buildFamilyTree(data) {
 		},
 		// mouseScrool: FamilyTree.action.none,
 		nodes: nodes,
-		enableSearch: false,
+		enableSearch: true,
 		nodeMouseClick: false,
-		partnerNodeSeparation: 0,
-		levelSeparation: 80,
-		minPartnerSeparation: 10,
-		siblingSeparation: 80
+		partnerNodeSeparation: 10,
+		levelSeparation: 119,
+		minPartnerSeparation: 20,
+		siblingSeparation: 70,
+		subtreeSeparation: 100
 
 	});
 

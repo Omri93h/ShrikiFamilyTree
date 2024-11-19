@@ -29,7 +29,7 @@ svg {
 #tree {
   flex: 1;
   width: 100%;
-  padding-bottom: 10px;
+  padding-bottom: 5px;
   overflow: hidden;
 }
 
@@ -76,6 +76,18 @@ path {
 
 text {
   fill: #2c3e50;
+  z-index: 99;
+  stroke-width: 3px;
+  stroke: #fff;
+  paint-order: stroke fill;
+}
+
+.text-span {
+  background-color: #00f;
+}
+
+use {
+  z-index: 1 !important;
 }
 
 .header-row {
