@@ -93,7 +93,7 @@ document.getElementById("familyForm").addEventListener("submit", function(e) {
     // Convert formData to a plain object
     var data = {};
     formData.forEach(function(value, key) {
-        data[key] = value;
+        data[key] = value.trim();
     });
     // Map bloodConnection value from English to Hebrew
     if (data.bloodConnection === "Yes") data.bloodConnection = "\u05DB\u05DF";

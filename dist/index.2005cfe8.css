@@ -70,8 +70,8 @@ h4 a:hover {
 }
 
 path {
-  stroke: #2c3e50;
-  stroke-width: 2px !important;
+  stroke-width: 3px;
+  stroke: #475c71;
 }
 
 text {

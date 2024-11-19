@@ -87,8 +87,8 @@ h4 a:hover {
 
 /* Custom path and text styles */
 path {
-    stroke-width: 2px !important;
-    stroke: #2c3e50; /* Custom color */
+    stroke-width: 3px;
+    stroke: #475c71; /* Custom color */
 }
 
 text {
