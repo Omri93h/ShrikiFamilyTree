@@ -128,9 +128,10 @@ function buildFamilyTree(data) {
         nodes: nodes,
         enableSearch: false,
         nodeMouseClick: false,
-        partnerNodeSeparation: -119,
+        partnerNodeSeparation: 0,
         levelSeparation: 80,
-        minPartnerSeparation: 20
+        minPartnerSeparation: 10,
+        siblingSeparation: 80
     });
     console.log("Final Nodes:", nodes);
 }
