@@ -33,8 +33,8 @@ function getLifeSpan(birthDate, deathDate) {
 function buildParentConnections(data, nodes) {
 	data.forEach((person) => {
 		const node = nodes[person.id - 1];
-		const motherFirstName = person.motherFirstName.split(" ")[0];
-		const fatherFirstName = person.fatherFirstName.split(" ")[0];
+		const motherFirstName = person.motherFirstName;
+		const fatherFirstName = person.fatherFirstName;
 
 		if (motherFirstName && fatherFirstName) {
 			// Find all potential mothers and fathers with matching first names
@@ -64,15 +64,15 @@ function buildParentConnections(data, nodes) {
 
 	// Sort children by birth date for each parent-child group
 	data.forEach((person) => {
-		const motherFirstName = person.motherFirstName.split(" ")[0];
-		const fatherFirstName = person.fatherFirstName.split(" ")[0];
+		const motherFirstName = person.motherFirstName;
+		const fatherFirstName = person.fatherFirstName;
 		if (motherFirstName && fatherFirstName) {
 			let children = data.filter(
 				(child) =>
 					child.motherFirstName &&
-					child.motherFirstName.split(" ")[0] === motherFirstName &&
+					child.motherFirstName === motherFirstName &&
 					child.fatherFirstName &&
-					child.fatherFirstName.split(" ")[0] === fatherFirstName
+					child.fatherFirstName === fatherFirstName
 			);
 			children.sort((a, b) => new Date(a.birthDate) - new Date(b.birthDate));
 
