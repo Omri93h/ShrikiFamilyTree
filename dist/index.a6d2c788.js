@@ -1,4 +1,4 @@
-GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwQSVPqHLgN2YjJzu9LsPZTAUCxyPl-I2IDxXewbEhJi2hr7VYRrBzskuyqpDUK6oEdSQ/exec";
+GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx_2rPGK5vUbfcsErPny0hsP532IUaHFMyyZhldk12zneFEat_rWizd19--nZ5kU_aezw/exec";
 // Function to adjust dates to local time by adding the offset
 function adjustToLocalTime(dateString) {
     const date = new Date(dateString);
@@ -190,7 +190,7 @@ function buildFamilyTree(data) {
         siblingSeparation: 70,
         subtreeSeparation: 100,
         scaleInitial: FamilyTree.match.height,
-        padding: 40
+        padding: 120
     });
     family.load(nodes);
     console.log("Final Nodes:", nodes);

@@ -13,7 +13,7 @@ svg {
   border-radius: 10px;
   width: 99%;
   height: 95%;
-  padding-bottom: 50px;
+  padding-bottom: 20px;
 }
 
 .container {
@@ -21,6 +21,7 @@ svg {
   flex: 1;
   justify-content: center;
   align-items: center;
+  padding: 0 10px;
   display: flex;
   overflow: hidden;
 }
@@ -29,6 +30,7 @@ svg {
   flex: 1;
   width: 100%;
   padding-bottom: 5px;
+  overflow: hidden;
 }
 
 .node {
@@ -120,5 +122,9 @@ use {
 
 .header-row h4 a:hover {
   background-color: #2980b9;
+}
+
+.bft-search {
+  top: 0 !important;
 }
 /*# sourceMappingURL=index.2005cfe8.css.map */

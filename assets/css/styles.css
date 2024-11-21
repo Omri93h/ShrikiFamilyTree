@@ -15,7 +15,7 @@ svg {
     border: 1px solid #ddd;
     background-color: #ffffff;
     border-radius: 10px;
-    padding-bottom: 50px; /* Extra space below the nodes inside the SVG */
+    padding-bottom: 20px; /* Extra space below the nodes inside the SVG */
 }
 
 /* Main container for centered alignment */
@@ -26,14 +26,14 @@ svg {
     justify-content: center;
     align-items: center;
     overflow: hidden; /* Prevents inner scroll */
-    /* padding: 0 10px; Adjust as needed */
+    padding: 0 10px; /* Adjust as needed */
 }
 
 /* Family tree container to occupy remaining space */
 #tree {
     flex: 1; /* Takes up remaining space in container */
     width: 100%;
-    /* overflow: hidden; Prevents inner scrolling */
+    overflow: hidden; /* Prevents inner scrolling */
     padding-bottom: 5px; /* Adds space from the bottom */
 }
 
@@ -151,3 +151,6 @@ use {
 
 
 
+.bft-search {
+    top: 0px !important;
+}
