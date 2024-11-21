@@ -13,7 +13,7 @@ svg {
   border-radius: 10px;
   width: 99%;
   height: 95%;
-  padding-bottom: 20px;
+  padding-bottom: 50px;
 }
 
 .container {
@@ -21,7 +21,6 @@ svg {
   flex: 1;
   justify-content: center;
   align-items: center;
-  padding: 0 10px;
   display: flex;
   overflow: hidden;
 }
@@ -30,7 +29,6 @@ svg {
   flex: 1;
   width: 100%;
   padding-bottom: 5px;
-  overflow: hidden;
 }
 
 .node {
@@ -75,9 +73,8 @@ path {
 }
 
 text {
-  fill: #2c3e50;
   z-index: 99;
-  stroke-width: 3px;
+  stroke-width: 8px;
   stroke: #fff;
   paint-order: stroke fill;
 }

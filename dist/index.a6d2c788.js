@@ -1,3 +1,4 @@
+GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwQSVPqHLgN2YjJzu9LsPZTAUCxyPl-I2IDxXewbEhJi2hr7VYRrBzskuyqpDUK6oEdSQ/exec";
 // Function to adjust dates to local time by adding the offset
 function adjustToLocalTime(dateString) {
     const date = new Date(dateString);
@@ -24,36 +25,81 @@ function buildParentConnections(data, nodes) {
     data.forEach((person)=>{
         const node = nodes[person.id - 1];
         const motherFirstName = person.motherFirstName;
+        const motherLastName = person.motherLastName;
         const fatherFirstName = person.fatherFirstName;
-        if (motherFirstName && fatherFirstName) {
-            // Find all potential mothers and fathers with matching first names
-            const potentialMothers = data.filter((p)=>p.firstName === motherFirstName);
-            const potentialFathers = data.filter((p)=>p.firstName === fatherFirstName);
-            // Identify mother-father pairs that are spouses
-            let mother = null;
-            let father = null;
-            for (let m of potentialMothers){
-                for (let f of potentialFathers)// Check if the mother-father pair are spouses
-                if (nodes[m.id - 1].pids.includes(f.id)) {
-                    mother = m;
-                    father = f;
-                    break;
+        const fatherLastName = person.fatherLastName;
+        let mother = null;
+        let father = null;
+        // Handle Mother Connection
+        if (motherFirstName && motherLastName) {
+            // Find all potential mothers matching both first and last names
+            const potentialMothers = data.filter((p)=>p.firstName === motherFirstName && p.lastName === motherLastName);
+            if (potentialMothers.length === 1) mother = potentialMothers[0];
+            else if (potentialMothers.length > 1) {
+                // we currently choose the first connection that created (bandage fix)
+                mother = potentialMothers[0];
+                // If multiple mothers found, attempt to find one whose spouse is the father
+                const potentialFathers = data.filter((p)=>p.firstName === fatherFirstName && p.lastName === fatherLastName);
+                for (let m of potentialMothers){
+                    for (let f of potentialFathers)if (nodes[m.id - 1].pids.includes(f.id) && nodes[f.id - 1].pids.includes(m.id)) {
+                        mother = m;
+                        father = f;
+                        break;
+                    }
+                    if (mother) break;
                 }
-                if (mother && father) break;
-            }
-            // Assign the mother and father IDs if a matching spouse pair is found
-            if (mother) node.mid = mother.id;
-            if (father) node.fid = father.id;
+                if (!mother) console.warn(`Multiple mothers found for ${person.firstName} ${person.lastName}, but no spouse connection with the father.`);
+            } else console.warn(`No mother found with name ${motherFirstName} ${motherLastName} for ${person.firstName} ${person.lastName}.`);
         }
+        // Handle Father Connection
+        if (fatherFirstName && fatherLastName && !father) {
+            // Find all potential fathers matching both first and last names
+            const potentialFathers = data.filter((p)=>p.firstName === fatherFirstName && p.lastName === fatherLastName);
+            if (potentialFathers.length === 1) father = potentialFathers[0];
+            else if (potentialFathers.length > 1) {
+                // we currently choose the first connection that created (bandage fix)
+                father = potentialFathers[0];
+                // If multiple fathers found, attempt to find one whose spouse is the mother
+                const potentialMothers = data.filter((p)=>p.firstName === motherFirstName && p.lastName === motherLastName);
+                for (let f of potentialFathers){
+                    for (let m of potentialMothers)if (nodes[f.id - 1].pids.includes(m.id) && nodes[m.id - 1].pids.includes(f.id)) {
+                        father = f;
+                        mother = m;
+                        break;
+                    }
+                    if (father) break;
+                }
+                if (!father) console.warn(`Multiple fathers found for ${person.firstName} ${person.lastName}, but no spouse connection with the mother.`);
+            } else console.warn(`No father found with name ${fatherFirstName} ${fatherLastName} for ${person.firstName} ${person.lastName}.`);
+        }
+        // Assign mother and father IDs if found
+        if (mother) node.mid = mother.id;
+        if (father) node.fid = father.id;
     });
     // Sort children by birth date for each parent-child group
     data.forEach((person)=>{
         const motherFirstName = person.motherFirstName;
+        const motherLastName = person.motherLastName;
         const fatherFirstName = person.fatherFirstName;
-        if (motherFirstName && fatherFirstName) {
-            let children = data.filter((child)=>child.motherFirstName && child.motherFirstName === motherFirstName && child.fatherFirstName && child.fatherFirstName === fatherFirstName);
+        const fatherLastName = person.fatherLastName;
+        if (motherFirstName && motherLastName && fatherFirstName && fatherLastName) {
+            let children = data.filter((child)=>child.motherFirstName === motherFirstName && child.motherLastName === motherLastName && child.fatherFirstName === fatherFirstName && child.fatherLastName === fatherLastName);
             children.sort((a, b)=>new Date(a.birthDate) - new Date(b.birthDate));
             // Update children in nodes by order of birth date
+            children.forEach((child, index)=>{
+                nodes[child.id - 1].siblingOrder = index;
+            });
+        } else if (motherFirstName && motherLastName) {
+            // Handle single mother
+            let children = data.filter((child)=>child.motherFirstName === motherFirstName && child.motherLastName === motherLastName && (!child.fatherFirstName || !child.fatherLastName));
+            children.sort((a, b)=>new Date(a.birthDate) - new Date(b.birthDate));
+            children.forEach((child, index)=>{
+                nodes[child.id - 1].siblingOrder = index;
+            });
+        } else if (fatherFirstName && fatherLastName) {
+            // Handle single father
+            let children = data.filter((child)=>child.fatherFirstName === fatherFirstName && child.fatherLastName === fatherLastName && (!child.motherFirstName || !child.motherLastName));
+            children.sort((a, b)=>new Date(a.birthDate) - new Date(b.birthDate));
             children.forEach((child, index)=>{
                 nodes[child.id - 1].siblingOrder = index;
             });
@@ -65,15 +111,41 @@ function buildParentConnections(data, nodes) {
 function buildSpouseConnections(data, nodes) {
     // Build spouse connections
     data.forEach((person)=>{
-        if (person.spouseFirstName && person.spouseLastName) {
-            const spouse = data.find((p)=>p.firstName === person.spouseFirstName && p.lastName === person.spouseLastName);
-            if (spouse) {
-                nodes[person.id - 1].pids.push(spouse.id); // Connect spouses
-                nodes[spouse.id - 1].pids.push(person.id); // Ensure both sides are connected
-            }
+        const spouseFirstName = person.spouseFirstName;
+        const spouseLastName = person.spouseLastName;
+        if (spouseFirstName && spouseLastName) {
+            // Find all potential spouses matching both first and last names
+            const potentialSpouses = data.filter((p)=>p.firstName === spouseFirstName && p.lastName === spouseLastName);
+            if (potentialSpouses.length === 1) {
+                // Establish bidirectional spouse connections
+                const spouse = potentialSpouses[0];
+                nodes[person.id - 1].pids.push(spouse.id);
+                nodes[spouse.id - 1].pids.push(person.id);
+            } else if (potentialSpouses.length > 1) {
+                console.warn(`Multiple spouses found with name ${spouseFirstName} ${spouseLastName} for ${person.firstName} ${person.lastName}. Spouse connection skipped.`);
+                // we currently choose the first connection that created (bandage fix)
+                const spouse = potentialSpouses[0];
+                nodes[person.id - 1].pids.push(spouse.id);
+                nodes[spouse.id - 1].pids.push(person.id);
+            } else console.warn(`No spouse found with name ${spouseFirstName} ${spouseLastName} for ${person.firstName} ${person.lastName}.`);
         }
     });
 }
+document.addEventListener("DOMContentLoaded", ()=>{
+    console.log("Initializing data fetch");
+    document.getElementById("spinner").style.display = "block";
+    fetch(GOOGLE_SCRIPT_URL).then((response)=>{
+        console.log(`Received response with status: ${response.status}`);
+        if (!response.ok) throw new Error(`Network response was not ok: ${response.statusText}`);
+        return response.json();
+    }).then((data)=>{
+        console.log("Fetched data:", data);
+        buildFamilyTree(data);
+    }).catch((error)=>{
+        console.error("Fetch error:", error);
+        document.getElementById("spinner").style.display = "none";
+    });
+});
 function buildNodes(data) {
     const nodes = data.map((person)=>({
             id: person.id,
@@ -86,22 +158,6 @@ function buildNodes(data) {
         }));
     return nodes;
 }
-document.addEventListener("DOMContentLoaded", ()=>{
-    console.log("Initializing data fetch");
-    document.getElementById("spinner").style.display = "block";
-    const dataUrl = "https://script.google.com/macros/s/AKfycbxn2onZqiyTpulQTJsjSWgXDTJYN0bd9vKz4vjiiyMqKWlzRwCgggrM2dC1RZ_miroZBQ/exec";
-    fetch(dataUrl).then((response)=>{
-        console.log(`Received response with status: ${response.status}`);
-        if (!response.ok) throw new Error(`Network response was not ok: ${response.statusText}`);
-        return response.json();
-    }).then((data)=>{
-        console.log("Fetched data:", data);
-        buildFamilyTree(data);
-    }).catch((error)=>{
-        console.error("Fetch error:", error);
-        document.getElementById("spinner").style.display = "none";
-    });
-});
 function buildFamilyTree(data) {
     document.getElementById("spinner").style.display = "none";
     // Assign a unique id for each person
@@ -115,25 +171,28 @@ function buildFamilyTree(data) {
     // temp hard coded fix - need to fix later!
     nodes[0]["pids"].pop();
     nodes[1]["pids"].pop();
-    // Initialize FamilyTree.js with custom sibling spacing
-    new FamilyTree(document.getElementById("tree"), {
+    // Initialize FamilyTree.js
+    FamilyTree.templates.john.field_0 = `<text data-width="230" style="font-size: 16px;font-weight:bold;" fill="#2c3e50;" x="60" y="140" text-anchor="middle">{val}</text>`;
+    FamilyTree.templates.john.field_1 = `<text data-width="150" style="font-size: 13px;" fill="#2c3e50;" x="60" y="160" text-anchor="middle">{val}</text>`;
+    var family = new FamilyTree(document.getElementById("tree"), {
         template: "john",
-        dataSource: nodes,
         nodeBinding: {
             field_0: "name",
             field_1: "age",
             img_0: "img"
         },
         // mouseScrool: FamilyTree.action.none,
-        nodes: nodes,
         enableSearch: true,
         nodeMouseClick: false,
-        partnerNodeSeparation: 10,
-        levelSeparation: 119,
-        minPartnerSeparation: 20,
+        // partnerNodeSeparation: 30,
+        levelSeparation: 150,
+        minPartnerSeparation: 40,
         siblingSeparation: 70,
-        subtreeSeparation: 100
+        subtreeSeparation: 100,
+        scaleInitial: FamilyTree.match.height,
+        padding: 40
     });
+    family.load(nodes);
     console.log("Final Nodes:", nodes);
 }
 

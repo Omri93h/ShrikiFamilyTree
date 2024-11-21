@@ -1,4 +1,4 @@
-GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxn2onZqiyTpulQTJsjSWgXDTJYN0bd9vKz4vjiiyMqKWlzRwCgggrM2dC1RZ_miroZBQ/exec";
+GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwQSVPqHLgN2YjJzu9LsPZTAUCxyPl-I2IDxXewbEhJi2hr7VYRrBzskuyqpDUK6oEdSQ/exec";
 // Global variable to store fetched people data
 var peopleData = [];
 document.addEventListener("DOMContentLoaded", function() {
